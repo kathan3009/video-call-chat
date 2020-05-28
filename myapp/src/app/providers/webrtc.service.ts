@@ -11,7 +11,7 @@ export class WebrtcService {
   myEl: HTMLMediaElement;
   partnerEl: HTMLMediaElement;
 
-  stun = 'numb.viagenie.ca';
+  stun = 'stun.l.google.com:19302';
   mediaConnection: Peer.MediaConnection;
   options: Peer.PeerJSOption;
   stunServer: RTCIceServer = {
@@ -20,10 +20,6 @@ export class WebrtcService {
 
   constructor() {
 
-    this.options = {  // not used, by default it'll use peerjs server
-      key: 'cd1ft79ro8g833di',
-      debug: 3
-    };
   }
 
   getMedia() {
@@ -46,11 +42,14 @@ export class WebrtcService {
   }
 
   async createPeer(userId: string) {
-    this.peer = new Peer(userId,{
-      secure:true,
+    this.peer = new Peer(userId, {
+      secure: false,
       host:'bels-peerjs.herokuapp.com',
-      port:443
-
+      port: 9000,
+      debug: 3,
+      config: {
+        iceServers: [this.stunServer]
+      }
     });
     this.peer.on('open', () => {
       this.wait();

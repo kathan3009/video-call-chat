@@ -43,22 +43,23 @@ export class WebrtcService {
 
   async createPeer(userId: string) {
     this.peer = new Peer(userId, {
-      secure: false,
+      secure: true,
       host:'bels-peerjs.herokuapp.com',
-      port: 9000,
       debug: 3,
-      config: {
-        iceServers: [this.stunServer]
-      }
+     
     });
+   
     this.peer.on('open', () => {
+  
       this.wait();
+      
     });
   }
 
   call(partnerId: string) {
     const call = this.peer.call(partnerId, this.myStream);
     call.on('stream', (stream) => {
+      
       this.partnerEl.srcObject = stream;
     });
   }
